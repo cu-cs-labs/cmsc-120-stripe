@@ -9,7 +9,9 @@ The starter for the first Java classes of CMSC 120, Fall 2026.
 ## In IntelliJ IDEA
 
 Welcome screen → **Get from VCS** → paste this repository's URL → **Clone**.
-Then open `src/Stripe.java` and press the green Run arrow beside `main`.
+IDEA puts the folder under `IdeaProjects` in your user directory; that is
+where the files live. Then open `src/Stripe.java` and press the green Run
+arrow beside `main`.
 
 ## On OneCompiler
 
