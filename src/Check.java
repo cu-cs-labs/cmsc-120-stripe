@@ -18,10 +18,11 @@ class Check {
     static int passed = 0;
     static int failed = 0;
 
-    // Four `is`, all with the same name, one per kind of value. Java picks
-    // the one whose types match what you pass: the first for stripeWidth(10)
-    // and 60, the last for flagRow(1) and text. `static` on a method is what
-    // lets you write Check.is(...) without making a Check first.
+    // Four `is` here and two below, all with the same name, one per kind of
+    // value. Java picks the one whose types match what you pass: the first
+    // for stripeWidth(10) and 60, the fourth for flagRow(1) and text.
+    // `static` on a method is what lets you write Check.is(...) without
+    // making a Check first.
     //
     // Two numbers are equal when == says so. Two strings are equal when
     // .equals says so, and why those are two different questions is next
@@ -30,6 +31,19 @@ class Check {
     static void is(double got, double expected)   { record(got == expected, "" + got, "" + expected); }
     static void is(boolean got, boolean expected) { record(got == expected, "" + got, "" + expected); }
     static void is(String got, String expected)   { record(got.equals(expected), got, expected); }
+
+    // Two more, for the types you make yourself: an enum, and a record. Both
+    // ask .equals, which on a record compares the parts, one by one:
+    //
+    //     Check.is(sizeFor(12), Size.SMALL);
+    //     Check.is(upsideDown(f), new Flag(..., ..., ...));
+    //
+    // <E extends Enum<E>> says the two values are of the same enum, and
+    // Record is every record; neither is something this course writes.
+    // There is no `is` for any two values whatever: Check.is(600, "600")
+    // would then run and print got 600, expected 600.
+    static <E extends Enum<E>> void is(E got, E expected) { record(got.equals(expected), "" + got, "" + expected); }
+    static void is(Record got, Record expected)           { record(got.equals(expected), "" + got, "" + expected); }
 
     // Every `is` ends up here with the verdict and both values as text, so a
     // failure prints the same way whatever the type was. `"" + got` is how a
@@ -45,8 +59,11 @@ class Check {
     }
 
     // The last line of main: Pyret's "Looks shipshape", or the two counts.
+    // With no checks at all, it says so: nothing failed, and nothing passed.
     static void done() {
-        if (failed == 0) {
+        if (passed + failed == 0) {
+            IO.println("No checks yet: put a Check.is line in main for each example");
+        } else if (failed == 0) {
             IO.println("Looks shipshape, all " + passed + " checks passed");
         } else {
             IO.println(passed + " passed, " + failed + " FAILED");
